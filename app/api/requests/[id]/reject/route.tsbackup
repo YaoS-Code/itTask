@@ -1,0 +1,53 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import db from '@/lib/db';
+import { sendEmail } from '@/lib/email';
+import { NextRequest } from 'next/server';
+
+interface RequestDetails {
+  id: number;
+  requester_name: string;
+  requester_email: string;
+  request_type: string;
+  requested_date: string;
+  notes: string;
+  status: string;
+}
+
+export async function GET(request: NextRequest, context: any) {
+  const id = context.params.id; // 直接访问 `context.params.id`
+
+  try {
+    // 更新数据库中的状态
+    db.prepare(`UPDATE requests SET status = 'Rejected' WHERE id = ?`).run(id);
+
+    // 查询请求详情
+    const requestDetails = db
+      .prepare(`SELECT * FROM requests WHERE id = ?`)
+      .get(id) as RequestDetails;
+
+    // 发送邮件通知
+    await sendEmail(
+      requestDetails.requester_email,
+      '您的数据请求已被拒绝',
+      `
+        <p>尊敬的 ${requestDetails.requester_name},</p>
+        <p>很遗憾，您的数据请求已被<strong>拒绝</strong>。</p>
+        <ul>
+          <li><strong>请求类型:</strong> ${requestDetails.request_type}</li>
+          <li><strong>期望数据日期:</strong> ${requestDetails.requested_date}</li>
+          <li><strong>备注:</strong> ${requestDetails.notes || '无备注'}</li>
+        </ul>
+        <p>感谢您！</p>
+        <p>MMC Wellness IT 团队</p>
+      `
+    );
+
+    return new Response(`<p>请求 ${id} 已拒绝，邮件通知已发送。</p>`, {
+      status: 200,
+      headers: { 'Content-Type': 'text/html' },
+    });
+  } catch (error) {
+    console.error('拒绝请求时出错:', error);
+    return new Response('内部服务器错误', { status: 500 });
+  }
+}

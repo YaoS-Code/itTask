@@ -1,0 +1,48 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #0a0a0a;
+  --foreground: #ffffff;
+  --link-color: #8ab4f8;
+  --button-background: #0056b3;
+  --button-color: #ffffff;
+}
+
+body {
+  background: var(--foreground);
+  color: var(--background);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+a {
+  color: var(--link-color);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+button {
+  background-color: var(--button-background);
+  color: var(--button-color);
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  opacity: 0.8;
+}
+
+/* Test styles for visibility */
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+  padding: 10px;
+}
