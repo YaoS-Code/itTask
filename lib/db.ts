@@ -19,8 +19,11 @@ db.exec(`
     requester_email TEXT NOT NULL,
     request_type TEXT NOT NULL,
     requested_date TEXT NOT NULL,
+    authorized_by TEXT NOT NULL,
+    authorized_email TEXT NOT NULL,
     notes TEXT,
-    status TEXT DEFAULT 'Pending' -- Default status is Pending
+    status TEXT DEFAULT 'Pending',
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
   );
 `);
 

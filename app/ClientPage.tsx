@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 
 interface PastRequest {
   id: number;
@@ -18,7 +18,18 @@ interface ClientPageProps {
 
 export default function ClientPage({ pastRequests: initialRequests }: ClientPageProps) {
   const [pastRequests, setPastRequests] = useState<PastRequest[]>(initialRequests);
-  const formRef = useRef<HTMLFormElement>(null); // Create a form reference
+  const formRef = useRef<HTMLFormElement>(null);
+  const [requestType, setRequestType] = useState('');
+  const [authorized_by, setAuthorizedBy] = useState('');
+  const [authorized_email, setAuthorizedEmail] = useState('');
+
+  useEffect(() => {
+    if (requestType) {
+      const [name, email] = requestType.split(':');
+      setAuthorizedBy(name);
+      setAuthorizedEmail(email);
+    }
+  }, [requestType]);
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -53,6 +64,8 @@ export default function ClientPage({ pastRequests: initialRequests }: ClientPage
       ]);
 
       formRef.current!.reset(); // Reset the form
+      alert('Request submitted successfully! The page will refresh to show past requests.');
+      window.location.reload(); // Refresh the page
     } else {
       console.error('Failed to submit:', await res.text());
     }
@@ -62,11 +75,11 @@ export default function ClientPage({ pastRequests: initialRequests }: ClientPage
     <main className="p-8 space-y-12">
       {/* Section 1: Form */}
       <section className="bg-white shadow rounded p-6">
-        <h1 className="text-2xl font-bold mb-4">Request Data</h1>
+        <h1 className="text-2xl font-bold mb-4 text-center">Request Data from MMC Wellness</h1>
         <form ref={formRef} onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="col-span-1 flex flex-col">
             <label htmlFor="requesterName" className="font-medium mb-1">
-              Requester Name
+              Requester Name（请输入您的姓名）
             </label>
             <input
               type="text"
@@ -78,7 +91,7 @@ export default function ClientPage({ pastRequests: initialRequests }: ClientPage
           </div>
           <div className="col-span-1 flex flex-col">
             <label htmlFor="requesterEmail" className="font-medium mb-1">
-              Requester Email
+              Requester Email（请输入您的邮箱）
             </label>
             <input
               type="email"
@@ -90,23 +103,28 @@ export default function ClientPage({ pastRequests: initialRequests }: ClientPage
           </div>
           <div className="col-span-1 flex flex-col">
             <label htmlFor="requestType" className="font-medium mb-1">
-              Type of Data Requested
+              Type of Data（请选择对应诊所，如果是敏感数据，请选择CEO）
             </label>
             <select
               name="requestType"
               id="requestType"
               required
               className="border border-gray-300 rounded px-3 py-2"
+              value={requestType}
+              onChange={(e) => setRequestType(e.target.value)}
             >
-              <option value="Sales">Sales</option>
-              <option value="Employee Sales">Employee Sales</option>
-              <option value="KPI">KPI</option>
-              <option value="Other">Other</option>
+              <option value="">Please select the type of data</option>
+              <option value="Susanna:it@mmcwellness.ca">CEO-Susanna</option>
+              <option value="Serena:it@mmcwellness.ca">RAAC-Serena</option>
+              <option value="Eva:it@mmcwellness.ca">MMC-Eva</option>
+              <option value="Jacinda:it@mmcwellness.ca">SkinartMD-Jacinda</option>
             </select>
           </div>
+          <input type="hidden" name="authorized_by" id="authorized_by" value={authorized_by} />
+          <input type="hidden" name="authorized_email" id="authorized_email" value={authorized_email} />
           <div className="col-span-1 flex flex-col">
             <label htmlFor="requestedDate" className="font-medium mb-1">
-              Preferred Data Retrieval Date
+              Preferred Data Retrieval Date（请选择您希望获取数据的时间）
             </label>
             <input
               type="date"
@@ -114,11 +132,14 @@ export default function ClientPage({ pastRequests: initialRequests }: ClientPage
               id="requestedDate"
               required
               className="border border-gray-300 rounded px-3 py-2"
+              min={new Date().toISOString().split('T')[0]}
+              defaultValue={new Date().toISOString().split('T')[0]}
             />
           </div>
+
           <div className="col-span-2 flex flex-col">
             <label htmlFor="notes" className="font-medium mb-1">
-              Notes / Additional Reasons
+              Notes / Additional Reasons（请输入您希望获取的具体内容）
             </label>
             <textarea
               name="notes"
