@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "better-sqlite3": "^11.7.0",
+    "moment-timezone": "^0.5.46",
     "next": "15.1.2",
     "nodemailer": "^6.9.16",
     "react": "^19.0.0",

@@ -47,32 +47,66 @@ export async function POST(request: Request) {
         'it@mmcwellness.ca',
         'New Data Request Submitted',
         `
-          <p>A new data request has been submitted:</p>
-          <ul>
-            <li><strong>Requester:</strong> ${requester_name}</li>
-            <li><strong>Email:</strong> ${requester_email}</li>
-            <li><strong>Type:</strong> ${request_type}</li>
-            <li><strong>Date Needed:</strong> ${requested_date}</li>
-            <li><strong>Notes:</strong> ${notes || 'N/A'}</li>
-          </ul>
-          <p>Check the dashboard for further action.</p>
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <style>
+              body { font-family: Arial, sans-serif; line-height: 1.6; max-width: 600px; margin: 0 auto; padding: 20px; }
+              ul { padding-left: 20px; }
+              li { margin-bottom: 8px; }
+              .button { display: inline-block; padding: 10px 20px; margin: 10px 5px; text-decoration: none; border-radius: 5px; }
+              .approve { background: #4CAF50; color: white !important; }
+              .reject { background: #f44336; color: white !important; }
+            </style>
+          </head>
+          <body>
+            <p>A new data request has been submitted:</p>
+            <ul>
+              <li><strong>Requester:</strong> ${requester_name}</li>
+              <li><strong>Email:</strong> ${requester_email}</li>
+              <li><strong>Type:</strong> ${request_type}</li>
+              <li><strong>Date Needed:</strong> ${requested_date}</li>
+              <li><strong>Notes:</strong> ${notes || 'N/A'}</li>
+            </ul>
+            <p>Check the dashboard for further action.</p>
+          </body>
+          </html>
         `
       ),
       sendEmail(
         authorized_email,
         'Data Request Approval Needed',
         `
-          <p>A new data request has been submitted by ${requester_name}:</p>
-          <ul>
-            <li><strong>Email:</strong> ${requester_email}</li>
-            <li><strong>Type:</strong> ${request_type}</li>
-            <li><strong>Date Needed:</strong> ${requested_date}</li>
-            <li><strong>Notes:</strong> ${notes || 'N/A'}</li>
-          </ul>
-          <p>Please approve or reject the request using the links below:</p>
-          <a href="${process.env.APP_BASE_URL}/api/requests/${requestId}/approve" style="color: green;">Approve</a> |
-          <a href="${process.env.APP_BASE_URL}/api/requests/${requestId}/reject" style="color: red;">Reject</a>
-          <p>If you need more details, please reply with your questions.</p>
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <style>
+              body { font-family: Arial, sans-serif; line-height: 1.6; max-width: 600px; margin: 0 auto; padding: 20px; }
+              ul { padding-left: 20px; }
+              li { margin-bottom: 8px; }
+              .button { display: inline-block; padding: 10px 20px; margin: 10px 5px; text-decoration: none; border-radius: 5px; }
+              .approve { background: #4CAF50; color: white !important; }
+              .reject { background: #f44336; color: white !important; }
+            </style>
+          </head>
+          <body>
+            <p>A new data request has been submitted by ${requester_name}:</p>
+            <ul>
+              <li><strong>Email:</strong> ${requester_email}</li>
+              <li><strong>Type:</strong> ${request_type}</li>
+              <li><strong>Date Needed:</strong> ${requested_date}</li>
+              <li><strong>Notes:</strong> ${notes || 'N/A'}</li>
+            </ul>
+            <p>Please approve or reject the request using the buttons below:</p>
+            <div>
+              <a href="${process.env.APP_BASE_URL}/api/requests/${requestId}/approve" class="button approve">Approve</a>
+              <a href="${process.env.APP_BASE_URL}/api/requests/${requestId}/reject" class="button reject">Reject</a>
+            </div>
+            <p>If you need more details, please reply with your questions.</p>
+          </body>
+          </html>
         `
       )
     ];

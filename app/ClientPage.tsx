@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from 'react';
+import moment from 'moment-timezone';
 
 interface PastRequest {
   id: number;
@@ -8,6 +9,7 @@ interface PastRequest {
   requester_email: string;
   request_type: string;
   requested_date: string;
+  created_at: string;
   notes: string;
   status: string;
 }
@@ -59,6 +61,7 @@ export default function ClientPage({ pastRequests: initialRequests }: ClientPage
           id: newRequest.id,
           ...payload,
           status: 'Pending',
+          created_at: moment().tz("America/Los_Angeles").format(),
         },
         ...prev,
       ]);
@@ -72,13 +75,13 @@ export default function ClientPage({ pastRequests: initialRequests }: ClientPage
   }
 
   return (
-    <main className="p-8 space-y-12">
+    <main className="p-4 md:p-8 space-y-8">
       {/* Section 1: Form */}
-      <section className="bg-white shadow rounded p-6">
-        <h1 className="text-2xl font-bold mb-4 text-center">Request Data from MMC Wellness</h1>
-        <form ref={formRef} onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="col-span-1 flex flex-col">
-            <label htmlFor="requesterName" className="font-medium mb-1">
+      <section className="bg-white shadow rounded p-4 md:p-6">
+        <h1 className="text-xl md:text-2xl font-bold mb-4 text-center">Request Data from MMC Wellness</h1>
+        <form ref={formRef} onSubmit={handleSubmit} className="space-y-4">
+          <div className="flex flex-col">
+            <label htmlFor="requesterName" className="font-medium mb-1 text-sm md:text-base">
               Requester Name（请输入您的姓名）
             </label>
             <input
@@ -86,11 +89,11 @@ export default function ClientPage({ pastRequests: initialRequests }: ClientPage
               name="requesterName"
               id="requesterName"
               required
-              className="border border-gray-300 rounded px-3 py-2"
+              className="border border-gray-300 rounded px-3 py-2 w-full"
             />
           </div>
-          <div className="col-span-1 flex flex-col">
-            <label htmlFor="requesterEmail" className="font-medium mb-1">
+          <div className="flex flex-col">
+            <label htmlFor="requesterEmail" className="font-medium mb-1 text-sm md:text-base">
               Requester Email（请输入您的邮箱）
             </label>
             <input
@@ -98,18 +101,18 @@ export default function ClientPage({ pastRequests: initialRequests }: ClientPage
               name="requesterEmail"
               id="requesterEmail"
               required
-              className="border border-gray-300 rounded px-3 py-2"
+              className="border border-gray-300 rounded px-3 py-2 w-full"
             />
           </div>
-          <div className="col-span-1 flex flex-col">
-            <label htmlFor="requestType" className="font-medium mb-1">
+          <div className="flex flex-col">
+            <label htmlFor="requestType" className="font-medium mb-1 text-sm md:text-base">
               Type of Data（请选择对应诊所，如果是敏感数据，请选择CEO）
             </label>
             <select
               name="requestType"
               id="requestType"
               required
-              className="border border-gray-300 rounded px-3 py-2"
+              className="border border-gray-300 rounded px-3 py-2 w-full"
               value={requestType}
               onChange={(e) => setRequestType(e.target.value)}
             >
@@ -122,8 +125,8 @@ export default function ClientPage({ pastRequests: initialRequests }: ClientPage
           </div>
           <input type="hidden" name="authorized_by" id="authorized_by" value={authorized_by} />
           <input type="hidden" name="authorized_email" id="authorized_email" value={authorized_email} />
-          <div className="col-span-1 flex flex-col">
-            <label htmlFor="requestedDate" className="font-medium mb-1">
+          <div className="flex flex-col">
+            <label htmlFor="requestedDate" className="font-medium mb-1 text-sm md:text-base">
               Preferred Data Retrieval Date（请选择您希望获取数据的时间）
             </label>
             <input
@@ -131,27 +134,27 @@ export default function ClientPage({ pastRequests: initialRequests }: ClientPage
               name="requestedDate"
               id="requestedDate"
               required
-              className="border border-gray-300 rounded px-3 py-2"
-              min={new Date().toISOString().split('T')[0]}
-              defaultValue={new Date().toISOString().split('T')[0]}
+              className="border border-gray-300 rounded px-3 py-2 w-full"
+              min={moment().tz("America/Los_Angeles").format('YYYY-MM-DD')}
+              defaultValue={moment().tz("America/Los_Angeles").format('YYYY-MM-DD')}
             />
           </div>
 
-          <div className="col-span-2 flex flex-col">
-            <label htmlFor="notes" className="font-medium mb-1">
+          <div className="flex flex-col">
+            <label htmlFor="notes" className="font-medium mb-1 text-sm md:text-base">
               Notes / Additional Reasons（请输入您希望获取的具体内容）
             </label>
             <textarea
               name="notes"
               id="notes"
               rows={4}
-              className="border border-gray-300 rounded px-3 py-2"
+              className="border border-gray-300 rounded px-3 py-2 w-full"
             ></textarea>
           </div>
-          <div className="col-span-2 flex justify-end">
+          <div className="flex justify-center md:justify-end">
             <button
               type="submit"
-              className="bg-blue-600 text-white font-medium px-5 py-2 rounded hover:bg-blue-700"
+              className="w-full md:w-auto bg-blue-600 text-white font-medium px-5 py-2 rounded hover:bg-blue-700"
             >
               Submit Request
             </button>
@@ -160,27 +163,28 @@ export default function ClientPage({ pastRequests: initialRequests }: ClientPage
       </section>
 
       {/* Section 2: Past Requests */}
-      <section className="bg-white shadow rounded p-6">
-        <h2 className="text-xl font-bold mb-4">Past Requests</h2>
-        <div className="overflow-auto">
-          <table className="w-full table-auto border-collapse">
+      <section className="bg-white shadow rounded p-4 md:p-6">
+        <h2 className="text-lg md:text-xl font-bold mb-4">Past Requests</h2>
+        <div className="overflow-x-auto -mx-4 md:mx-0">
+          <table className="w-full min-w-[640px] table-auto border-collapse">
             <thead>
               <tr className="border-b border-gray-300">
-                <th className="text-left p-3">Requester</th>
-                <th className="text-left p-3">Email</th>
-                <th className="text-left p-3">Type</th>
-                <th className="text-left p-3">Preferred Date</th>
-                <th className="text-left p-3">Status</th>
+                <th className="text-left p-2 md:p-3 text-sm md:text-base">Requester</th>
+                <th className="text-left p-2 md:p-3 text-sm md:text-base">Requested Date</th>
+                <th className="text-left p-2 md:p-3 text-sm md:text-base">Authorized By</th>
+                <th className="text-left p-2 md:p-3 text-sm md:text-base">Preferred Date</th>
+                <th className="text-left p-2 md:p-3 text-sm md:text-base">Status</th>
+                <th className="text-left p-2 md:p-3 text-sm md:text-base">Notes</th> 
               </tr>
             </thead>
             <tbody>
               {pastRequests.map((req) => (
                 <tr key={req.id} className="border-b border-gray-200">
-                  <td className="p-3">{req.requester_name}</td>
-                  <td className="p-3">{req.requester_email}</td>
-                  <td className="p-3">{req.request_type}</td>
-                  <td className="p-3">{req.requested_date}</td>
-                  <td className="p-3">
+                  <td className="p-2 md:p-3 text-sm md:text-base">{req.requester_name}</td>
+                  <td className="p-2 md:p-3 text-sm md:text-base">{moment(req.created_at).tz("America/Vancouver").format('YYYY-MM-DD')}</td>
+                  <td className="p-2 md:p-3 text-sm md:text-base">{req.request_type}</td>
+                  <td className="p-2 md:p-3 text-sm md:text-base">{req.requested_date}</td>
+                  <td className="p-2 md:p-3 text-sm md:text-base">
                     <span className="font-medium text-yellow-600">{req.status}</span>
                   </td>
                 </tr>

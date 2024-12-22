@@ -23,7 +23,7 @@ db.exec(`
     authorized_email TEXT NOT NULL,
     notes TEXT,
     status TEXT DEFAULT 'Pending',
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    created_at DATE DEFAULT (CURRENT_DATE)
   );
 `);
 

@@ -41,6 +41,11 @@ export async function GET(request: NextRequest, context: any) {
         <p>MMC Wellness IT Team</p>
       `
     );
+    await sendEmail(
+      'it@mmcwellness.ca',
+      'Data Request Approved',
+      `Request ${id} has been approved.`
+    );
 
     return new Response(`<p>Request ${id} has been approved, and an email notification has been sent.</p>`, {
       status: 200,
