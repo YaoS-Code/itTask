@@ -118,10 +118,10 @@ export default function ClientPage({ pastRequests: initialRequests }: ClientPage
               onChange={(e) => setRequestType(e.target.value)}
             >
               <option value="">Please select the type of data</option>
-              <option value="Susanna:it@mmcwellness.ca">CEO-Susanna</option>
-              <option value="Serena:it@mmcwellness.ca">RAAC-Serena</option>
-              <option value="Eva:it@mmcwellness.ca">MMC-Eva</option>
-              <option value="Jacinda:it@mmcwellness.ca">SkinartMD-Jacinda</option>
+              <option value="Susanna:fan.susanna@gmail.com">CEO-Susanna</option>
+              <option value="Serena:manager@richmondantiaging.ca">RAAC-Serena</option>
+              <option value="Eva:manager@mmcwellness.ca">MMC-Eva</option>
+              <option value="Jacinda:manager@skinartmd.ca">SkinartMD-Jacinda</option>
             </select>
           </div>
           <input type="hidden" name="authorized_by" id="authorized_by" value={authorized_by} />
