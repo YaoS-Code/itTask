@@ -53,7 +53,8 @@ export default function ClientPage({ pastRequests: initialRequests }: ClientPage
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
     });
-
+// add the notes to the payload
+    payload.notes = formData.get('notes') as string;
     if (res.ok) {
       const newRequest = await res.json();
       setPastRequests((prev) => [
@@ -187,6 +188,7 @@ export default function ClientPage({ pastRequests: initialRequests }: ClientPage
                   <td className="p-2 md:p-3 text-sm md:text-base">
                     <span className="font-medium text-yellow-600">{req.status}</span>
                   </td>
+                  <td className="p-2 md:p-3 text-sm md:text-base">{req.notes}</td>
                 </tr>
               ))}
             </tbody>
