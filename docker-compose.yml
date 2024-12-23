@@ -1,0 +1,9 @@
+version: '3.8'
+
+services:
+  it-tasks:
+    image: it-tasks:latest
+    ports:
+      - "5580:5580"
+    env_file:
+      - .env.local

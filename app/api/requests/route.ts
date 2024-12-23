@@ -101,8 +101,8 @@ export async function POST(request: Request) {
             </ul>
             <p>Please approve or reject the request using the buttons below:</p>
             <div>
-              <a href="${process.env.APP_BASE_URL}/api/requests/${requestId}/approve" class="button approve">Approve</a>
-              <a href="${process.env.APP_BASE_URL}/api/requests/${requestId}/reject" class="button reject">Reject</a>
+              <a href="${process.env.NEXT_PUBLIC_BASE_URL}/api/requests/${requestId}/approve" class="button approve">Approve</a>
+              <a href="${process.env.NEXT_PUBLIC_BASE_URL}/api/requests/${requestId}/reject" class="button reject">Reject</a>
             </div>
             <p>If you need more details, please reply with your questions.</p>
           </body>

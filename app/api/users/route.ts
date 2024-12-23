@@ -22,8 +22,8 @@ export async function POST(request: Request) {
     const requestId = info.lastInsertRowid;
 
     // Generate Approve and Reject Links
-    const approveLink = `${process.env.APP_BASE_URL}/api/requests/${requestId}/approve`;
-    const rejectLink = `${process.env.APP_BASE_URL}/api/requests/${requestId}/reject`;
+    const approveLink = `${process.env.NEXT_PUBLIC_BASE_URL}/api/requests/${requestId}/approve`;
+    const rejectLink = `${process.env.NEXT_PUBLIC_BASE_URL}/api/requests/${requestId}/reject`;
 
     // Send Email to IT Manager
     await sendEmail(
